@@ -1,13 +1,21 @@
 // Full Documentation - https://docs.turbo360.co
 const express = require('express')
 const router = express.Router()
+const controllers = require('../controllers')
 
-const Player = require('../models/Player')
-const Team = require('../models/Team')
+router.get('/:resource', (req, res) => {
+    const resource = req.params.resource
+    const controller = controllers[resource]
 
-router.get('/team', (req, res) => {
+    if (controller == null) {
+        res.json({
+            confirmation: 'fail',
+            data: 'Invalid request. Resource undefined'
+        })
+        return
+    }
 
-    Team.find(null)
+    controller.get()
         .then(data => {
             res.json({
                 confirmation: 'success',
@@ -21,26 +29,5 @@ router.get('/team', (req, res) => {
             })
         })
 })
-
-// router.get('/:resource', (req, res) => {
-
-//     const resource = req.params.resource
-
-//     const data = db[resource]
-//     if (data == null) {
-
-//         res.json({
-//             confirmation: 'fail',
-//             data: 'Invalid request. Resource undefined'
-//         })
-
-//         return
-//     }
-//     res.json({
-//         confirmation: 'success',
-//         data: data
-//     })
-
-// })
 
 module.exports = router
