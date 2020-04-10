@@ -6,6 +6,7 @@ const controllers = require('../controllers')
 router.get('/:resource', (req, res) => {
     const resource = req.params.resource
     const controller = controllers[resource]
+    const filters = req.query
 
     if (controller == null) {
         res.json({
@@ -15,7 +16,7 @@ router.get('/:resource', (req, res) => {
         return
     }
 
-    controller.get()
+    controller.get(filters)
         .then(data => {
             res.json({
                 confirmation: 'success',
