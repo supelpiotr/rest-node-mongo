@@ -2,23 +2,42 @@
 const express = require('express')
 const router = express.Router()
 
-/*  This is a sample API route. */
+const players = [
+    { firstName: "eli", lastName: "manning", position: "qb", age: 37, team: "nyg" },
+    { firstName: "tom", lastName: "brady", position: "qb", age: 41, team: "nep" },
+    { firstName: "jj", lastName: "watt", position: "de", age: 28, team: "hou" }
+]
+
+const teams = [
+    { name: "giants", city: "new york", conference: "nfc" },
+    { name: "patriots", city: "new england", conference: "afc" },
+    { name: "texans", city: "houston", conference: "afc" },
+]
+
+const db = {
+    team: teams,
+    player: players
+}
 
 router.get('/:resource', (req, res) => {
-	res.json({
-		confirmation: 'success',
-		resource: req.params.resource,
-		query: req.query // from the url query string
-	})
-})
 
-router.get('/:resource/:id', (req, res) => {
-	res.json({
-		confirmation: 'success',
-		resource: req.params.resource,
-		id: req.params.id,
-		query: req.query // from the url query string
-	})
+    const resource = req.params.resource
+
+    const data = db[resource]
+    if (data == null) {
+
+        res.json({
+            confirmation: 'fail',
+            data: 'Invalid request. Resource undefined'
+        })
+
+        return
+    }
+    res.json({
+        confirmation: 'success',
+        data: data
+    })
+
 })
 
 module.exports = router
